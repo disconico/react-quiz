@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import shuffle from './components/Helpers';
 import Question from './components/Question';
 
 function App() {
   const [allQuestions, setAllQuestions] = useState([]);
+  const [isStarted, setIsStarted] = useState(true);
   const [isOver, setIsOver] = useState(false);
-  const userAnswers = [
-    'noAnswer',
-    'noAnswer',
-    'noAnswer',
-    'noAnswer',
-    'noAnswer',
-  ];
-  const correctAnswers = [];
 
   useEffect(() => {
     async function getQuestions() {
@@ -20,30 +14,43 @@ function App() {
       );
       const data = await res.json();
       const dataResults = data.results;
+      const questions = [];
 
-      setAllQuestions(dataResults);
+      dataResults.forEach((result, index) => {
+        const allAnswers = [...result.incorrect_answers, result.correct_answer];
+        const currentQuestion = {
+          id: index,
+          question: result.question,
+          correctAnswer: result.correct_answer,
+          userAnswer: '',
+          allAnswers: shuffle(allAnswers),
+          isAnswered: false,
+          isCorrect: false,
+        };
+        questions.push(currentQuestion);
+        return questions;
+      });
+
+      setAllQuestions(questions);
     }
     getQuestions();
-  }, []);
-
-  function storeAnswers(array) {
-    array.forEach((question, index) =>
-      correctAnswers.push({
-        id: array.indexOf(array[index]),
-        correctAnswer: array[index].correct_answer,
-      })
-    );
-  }
-
-  useEffect(() => {
-    storeAnswers(allQuestions);
-  }, [allQuestions]);
+  }, [isOver]);
 
   function storeUserAnswers(event) {
     const userTargetAnswer = event.target.innerText;
     const answerIndex = parseInt(event.target.id);
 
-    userAnswers.splice(answerIndex, 1, userTargetAnswer);
+    setAllQuestions((prevQuestions) => {
+      const newQuestions = prevQuestions.map((obj) => {
+        if (obj.id === answerIndex) {
+          return { ...obj, userAnswer: userTargetAnswer, isAnswered: true };
+        } else {
+          return obj;
+        }
+      });
+      return newQuestions;
+    });
+    console.log(allQuestions);
   }
 
   function styleSelection(event) {
@@ -55,20 +62,28 @@ function App() {
     event.currentTarget.classList.add('selected');
   }
 
+  function checkAnswer(event) {
+    const answerIndex = parseInt(event.target.id);
+
+    setAllQuestions((prevQuestions) => {
+      const newQuestions = prevQuestions.map((obj) => {
+        if (obj.id === answerIndex && obj.correctAnswer === obj.userAnswer) {
+          return { ...obj, isCorrect: true };
+        } else {
+          return obj;
+        }
+      });
+      return newQuestions;
+    });
+    console.log(allQuestions);
+  }
+
+  function checkAllAnswers() {}
+
   function handleClick(event) {
     storeUserAnswers(event);
     styleSelection(event);
-  }
-
-  function checkResult() {
-    let score = 0;
-    for (let i = 0; i < 5; i++) {
-      if (correctAnswers[i].correctAnswer === userAnswers[i]) {
-        score += 1;
-      }
-    }
-    console.log(score);
-    setIsOver(true);
+    checkAnswer(event);
   }
 
   const questionsElements = allQuestions.map((question, index) => (
@@ -76,18 +91,22 @@ function App() {
       key={index}
       id={index}
       question={question.question}
-      correctAnswer={question.correct_answer}
-      otherAnswers={question.incorrect_answers}
-      handleAnswer={(event) => handleClick(event)}
+      correctAnswer={question.correctAnswer}
+      allAnswers={question.allAnswers}
+      isAnswered={question.isAnswered}
+      isCorrect={question.isCorrect}
+      handleClick={(event) => handleClick(event)}
     />
   ));
 
   return (
     <main className='main'>
       {questionsElements}
-      <button className='check-answers' onClick={checkResult}>
-        Check answers!
-      </button>
+      {isStarted && !isOver && (
+        <button className='check-answers' onClick={checkAllAnswers}>
+          Check answers!
+        </button>
+      )}
     </main>
   );
 }

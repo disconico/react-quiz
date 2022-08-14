@@ -6,6 +6,7 @@ function App() {
   const [allQuestions, setAllQuestions] = useState([]);
   const [isStarted, setIsStarted] = useState(true);
   const [isOver, setIsOver] = useState(false);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     async function getQuestions() {
@@ -34,7 +35,7 @@ function App() {
       setAllQuestions(questions);
     }
     getQuestions();
-  }, [isOver]);
+  }, []);
 
   function storeUserAnswers(event) {
     const userTargetAnswer = event.target.innerText;
@@ -62,28 +63,45 @@ function App() {
     event.currentTarget.classList.add('selected');
   }
 
-  function checkAnswer(event) {
+  function checkIfCorrect(event) {
     const answerIndex = parseInt(event.target.id);
 
     setAllQuestions((prevQuestions) => {
       const newQuestions = prevQuestions.map((obj) => {
         if (obj.id === answerIndex && obj.correctAnswer === obj.userAnswer) {
           return { ...obj, isCorrect: true };
+        } else if (
+          obj.id === answerIndex &&
+          obj.correctAnswer != obj.userAnswer
+        ) {
+          return { ...obj, isCorrect: false };
         } else {
           return obj;
         }
       });
       return newQuestions;
     });
-    console.log(allQuestions);
   }
 
-  function checkAllAnswers() {}
+  useEffect(() => {
+    setScore(() => {
+      let newScore = 0;
+      allQuestions.forEach((obj) => obj.isCorrect && newScore++);
+      console.log(newScore);
+      return newScore;
+    });
+  }, [allQuestions]);
 
   function handleClick(event) {
-    storeUserAnswers(event);
-    styleSelection(event);
-    checkAnswer(event);
+    if (!isOver) {
+      storeUserAnswers(event);
+      styleSelection(event);
+      checkIfCorrect(event);
+    }
+  }
+
+  function checkAnswers() {
+    setIsOver(true);
   }
 
   const questionsElements = allQuestions.map((question, index) => (
@@ -95,18 +113,31 @@ function App() {
       allAnswers={question.allAnswers}
       isAnswered={question.isAnswered}
       isCorrect={question.isCorrect}
+      isOver={isOver}
       handleClick={(event) => handleClick(event)}
     />
   ));
 
   return (
     <main className='main'>
-      {questionsElements}
-      {isStarted && !isOver && (
-        <button className='check-answers' onClick={checkAllAnswers}>
-          Check answers!
-        </button>
-      )}
+      <div className='main--questions'>
+        {questionsElements}
+        {isStarted && !isOver && (
+          <div className='main--check'>
+            <button className='check-answers' onClick={checkAnswers}>
+              Check answers!
+            </button>
+          </div>
+        )}
+        {isStarted && isOver && (
+          <div className='main--score'>
+            <p className='main--score--score'>
+              You scored {score}/5 correct answers
+            </p>
+            <button className='main--score--new-game'>Play again</button>
+          </div>
+        )}
+      </div>
     </main>
   );
 }

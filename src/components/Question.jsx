@@ -10,6 +10,7 @@ export default function Question(props) {
     handleClick,
     isAnswered,
     isCorrect,
+    isOver,
   } = props;
 
   return (

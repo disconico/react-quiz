@@ -1,7 +1,6 @@
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 17px;
   font-weight: 400;
 
   color-scheme: light dark;
@@ -30,7 +29,7 @@ body {
 main {
   background-color: #F5F5F5;
   color: #363652;
-  min-width: 800px;
+  min-width: 820px;
   min-height: 100vh;
   border-radius: 5px;
   display: flex;
@@ -47,6 +46,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  flex-wrap: wrap;
   align-items: center;
   max-width: 800px;
 }
@@ -57,27 +57,30 @@ main {
 }
 
 .question--title {
-  margin-left: 40px;
+  font-size: 2.4rem;
+  margin-left: 1rem;
   margin-bottom: 2rem;
+  word-wrap: normal;
 }
 
 
 .question--answers {
   display: flex;
   justify-content: space-between;
+  margin: 0 1rem;
 }
 
 .question--answer {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 400;
-  min-width: 130px;
-  height: 2em;
+  min-width: 150px;
+  height: 2.3em;
   background-color: white;
   border: 0.5px solid #90a6b3;
   color: #0B2434;
   border-radius: 0.5rem;
-  margin: auto 1rem;
+  padding: 0px 5px;
   white-space: nowrap;
   display: flex;
   align-items: center;

@@ -18,11 +18,13 @@
   box-sizing: border-box;
 }
 
+html {
+  height: 100vh;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-
-
 }
 
 main {
@@ -62,14 +64,14 @@ main {
 
 .question--answers {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .question--answer {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 0.8rem;
   font-weight: 400;
-  min-width: 90px;
+  min-width: 130px;
   height: 2em;
   background-color: white;
   border: 0.5px solid #90a6b3;
@@ -134,5 +136,42 @@ hr {
 .main--score--score {
   font-weight: 800;
   font-size: 1.6rem;
+}
+
+.main--start {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.main--start h1 {
+  font-size: 4rem;
+}
+
+.main--start h3 {
+  font-size: 2rem;
+}
+
+.main--start button {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  width: 200px;
+  height: 2.9rem;
+  border-radius: 10px;
+  border: none;
+  margin-top: 2rem;
+  background: #4D5B9E;
+  cursor: pointer;
+}
+
+.main--start button:focus {
+  outline: none;
+}
+
+.main--start button:active {
+  box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
 }
 

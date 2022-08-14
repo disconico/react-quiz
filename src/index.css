@@ -38,7 +38,7 @@ main {
   justify-content: space-around;
   align-items: center;
 
-  background-image: url(src/assets/blob5.png), url(src/assets/blobs.png);
+  background-image: url(./assets/blob5.png), url(.//assets/blobs.png);
   background-position: top right, left bottom;
   background-repeat: no-repeat, no-repeat;
 }
@@ -124,6 +124,10 @@ hr {
   border: none;
   margin-top: 2rem;
   background: #4D5B9E;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
 }
 
 .main--score{
@@ -154,9 +158,13 @@ hr {
   font-size: 2rem;
 }
 
-.main--start button {
+.main--start p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: bold;
   width: 200px;
   height: 2.9rem;
@@ -167,11 +175,11 @@ hr {
   cursor: pointer;
 }
 
-.main--start button:focus {
+.main--start p:focus {
   outline: none;
 }
 
-.main--start button:active {
+.main--start p:active {
   box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
 }
 

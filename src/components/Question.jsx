@@ -35,7 +35,7 @@ export default function Question(props) {
   }
 
   const buttonElement = allAnswers.map((answer, index) => (
-    <button
+    <p
       key={index}
       className={
         allAnswers[index] === correctAnswer
@@ -53,7 +53,7 @@ export default function Question(props) {
       id={id}
     >
       {allAnswers[index]}
-    </button>
+    </p>
   ));
 
   return (

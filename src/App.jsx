@@ -136,7 +136,7 @@ function App() {
         <div className='main--start'>
           <h1>My Quizzos</h1>
           <h3>Let's get started !</h3>
-          <button onClick={startGame}>Start Quizzos</button>
+          <p onClick={startGame}>Start Quizzos</p>
         </div>
       )}
       {isStarted === true && (
@@ -144,9 +144,9 @@ function App() {
           {questionsElements}
           {isStarted && !isOver && (
             <div className='main--check'>
-              <button className='check-answers' onClick={checkAnswers}>
+              <p className='check-answers' onClick={checkAnswers}>
                 Check answers!
-              </button>
+              </p>
             </div>
           )}
           {isStarted && isOver && (
@@ -154,9 +154,9 @@ function App() {
               <p className='main--score--score'>
                 You scored {score}/5 correct answers
               </p>
-              <button className='main--score--new-game' onClick={playAgain}>
+              <p className='main--score--new-game' onClick={playAgain}>
                 Play again
-              </button>
+              </p>
             </div>
           )}
         </div>

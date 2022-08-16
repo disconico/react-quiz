@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import shuffle from './components/Helpers';
 import Question from './components/Question';
 import Form from './components/Form';
+import Confetti from 'react-confetti';
 
 function App() {
   const [allQuestions, setAllQuestions] = useState([]);
@@ -14,6 +15,7 @@ function App() {
     numberOfQuestions: '5',
     category: '9',
   });
+  const [perfectScore, setPerfectScore] = useState(false);
 
   useEffect(() => {
     async function getQuestions() {
@@ -117,6 +119,7 @@ function App() {
 
   function checkAnswers() {
     setIsOver(true);
+    checkPerfectScore();
   }
 
   function playAgain() {
@@ -126,10 +129,19 @@ function App() {
     setTriggerAPI((oldCount) => {
       return oldCount + 1;
     });
+    setPerfectScore(false);
   }
 
   function startGame() {
     setIsStarted(true);
+  }
+
+  function checkPerfectScore() {
+    if (score === parseInt(userSelection.numberOfQuestions)) {
+      setPerfectScore(true);
+    } else {
+      setPerfectScore(false);
+    }
   }
 
   const questionsElements = allQuestions.map((question, index) => (
@@ -149,6 +161,7 @@ function App() {
 
   return (
     <main className='main'>
+      {perfectScore && <Confetti />}
       {isStarted === false && (
         <div className='main--start'>
           <h1>My Quizzos</h1>

@@ -19,33 +19,40 @@ function App() {
 
   useEffect(() => {
     async function getQuestions() {
-      const res = await fetch(
-        `https://opentdb.com/api.php?amount=${userSelection.numberOfQuestions}&category=${userSelection.category}&difficulty=${userSelection.difficulty}`
-      );
-      const data = await res.json();
+      try {
+        const res = await fetch(
+          `https://opentdb.com/api.php?amount=${userSelection.numberOfQuestions}&category=${userSelection.category}&difficulty=${userSelection.difficulty}`
+        );
+        const data = await res.json();
 
-      const dataResults = data.results;
+        const dataResults = data.results;
 
-      const questions = [];
+        const questions = [];
 
-      dataResults.forEach((result, index) => {
-        const allAnswers = [...result.incorrect_answers, result.correct_answer];
-        const currentQuestion = {
-          id: index,
-          question: result.question,
-          correctAnswer: result.correct_answer,
-          userAnswer: '',
-          allAnswers: shuffle(allAnswers),
-          isAnswered: false,
-          isCorrect: false,
-        };
-        questions.push(currentQuestion);
-        return questions;
-      });
-      setAllQuestions(questions);
+        dataResults.forEach((result, index) => {
+          const allAnswers = [
+            ...result.incorrect_answers,
+            result.correct_answer,
+          ];
+          const currentQuestion = {
+            id: index,
+            question: result.question,
+            correctAnswer: result.correct_answer,
+            userAnswer: '',
+            allAnswers: shuffle(allAnswers),
+            isAnswered: false,
+            isCorrect: false,
+          };
+          questions.push(currentQuestion);
+          return questions;
+        });
+        setAllQuestions(questions);
+      } catch (error) {
+        console.log(error);
+        return;
+      }
     }
     getQuestions();
-    console.log('I triggered BWOUHAHAHAHA');
   }, [triggerAPI]);
 
   function storeUserAnswers(event) {

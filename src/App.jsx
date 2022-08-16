@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import shuffle from './components/Helpers';
 import Question from './components/Question';
+import Form from './components/Form';
 
 function App() {
   const [allQuestions, setAllQuestions] = useState([]);
@@ -8,20 +9,20 @@ function App() {
   const [isOver, setIsOver] = useState(false);
   const [score, setScore] = useState(0);
   const [triggerAPI, setTriggerAPI] = useState(0);
+  const [userSelection, setUserSelection] = useState({
+    difficulty: 'easy',
+    numberOfQuestions: '5',
+    category: '9',
+  });
 
   useEffect(() => {
     async function getQuestions() {
       const res = await fetch(
-        `https://opentdb.com/api.php?amount=5&category=9&difficulty=easy&type=multiple`
+        `https://opentdb.com/api.php?amount=${userSelection.numberOfQuestions}&category=${userSelection.category}&difficulty=${userSelection.difficulty}`
       );
       const data = await res.json();
 
       const dataResults = data.results;
-
-      // const dataString = JSON.stringify(dataResults)
-      //   .replace(/[!@#$^&%*()+=[\]/{}|:<>?,.\\-]/g, '')
-      //   .replace('&#039;', ' ')
-      //   .replace('&quot;', '');
 
       const questions = [];
 
@@ -42,6 +43,7 @@ function App() {
       setAllQuestions(questions);
     }
     getQuestions();
+    console.log('I triggered BWOUHAHAHAHA');
   }, [triggerAPI]);
 
   function storeUserAnswers(event) {
@@ -61,10 +63,18 @@ function App() {
   }
 
   function styleSelection(event) {
-    event.target.parentNode.children[0].classList.remove('selected');
-    event.target.parentNode.children[1].classList.remove('selected');
-    event.target.parentNode.children[2].classList.remove('selected');
-    event.target.parentNode.children[3].classList.remove('selected');
+    if (event.target.parentNode.children[0]) {
+      event.target.parentNode.children[0].classList.remove('selected');
+    }
+    if (event.target.parentNode.children[1]) {
+      event.target.parentNode.children[1].classList.remove('selected');
+    }
+    if (event.target.parentNode.children[2]) {
+      event.target.parentNode.children[2].classList.remove('selected');
+    }
+    if (event.target.parentNode.children[3]) {
+      event.target.parentNode.children[3].classList.remove('selected');
+    }
 
     event.currentTarget.classList.add('selected');
   }
@@ -143,6 +153,11 @@ function App() {
         <div className='main--start'>
           <h1>My Quizzos</h1>
           <h3>Let's get started !</h3>
+          <Form
+            userSelection={userSelection}
+            setUserSelection={setUserSelection}
+            setTriggerAPI={setTriggerAPI}
+          />
           <p onClick={startGame}>Start Quizzos</p>
         </div>
       )}
@@ -159,7 +174,8 @@ function App() {
           {isStarted && isOver && (
             <div className='main--score'>
               <p className='main--score--score'>
-                You scored {score}/5 correct answers
+                You scored {score}/ {userSelection.numberOfQuestions} correct
+                answers
               </p>
               <p className='main--score--new-game' onClick={playAgain}>
                 Play again
